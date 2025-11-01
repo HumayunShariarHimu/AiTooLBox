@@ -1,0 +1,194 @@
+<!doctype html>
+
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AiTooLBox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --accent:#2563eb;
+      --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Noto Sans Bangla', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);color:#0f172a}
+    header{padding:28px 20px 10px;border-bottom:1px solid rgba(15,23,42,0.04);backdrop-filter: blur(6px);}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    h1{font-size:22px;margin:0 0 6px}
+    p.lead{margin:0;color:var(--muted)}.toolbar{display:flex;gap:12px;align-items:center;margin:18px 0;flex-wrap:wrap}
+.search{flex:1;min-width:220px}
+input[type="search"]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(15,23,42,0.08);font-size:15px}
+.actions{display:flex;gap:8px}
+button{padding:10px 14px;border-radius:10px;border:0;background:var(--card);box-shadow:0 1px 2px rgba(15,23,42,0.04);cursor:pointer}
+.pill{background:var(--accent);color:#fff}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.04);display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:16px}
+.meta{font-size:13px;color:var(--muted)}
+.card-actions{margin-top:auto;display:flex;gap:8px}
+.btn{flex:1;padding:8px 10px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);background:transparent}
+.btn.primary{background:var(--accent);color:#fff;border:0}
+
+.badge{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(37,99,235,0.08);color:var(--accent);display:inline-block}
+
+footer{padding:20px;text-align:center;color:var(--muted)}
+
+/* modal */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);}
+.modal.open{display:flex}
+.modal-card{width:min(720px,95%);background:var(--card);padding:18px;border-radius:12px}
+
+@media (max-width:520px){h1{font-size:18px}}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>AiTooLBox</h1>
+      <p class="lead">নিচে জনপ্রিয় AI টুলগুলোর তালিকা — সার্চ করে দ্রুত খুঁজুন, খোলা ও কপি করুন। (সংগৃহীত)</p>
+    </div>
+  </header>  <main class="container">
+    <div class="toolbar">
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="টুল অনুসন্ধান করুন — উদাহরণ: ChatGPT, Canva, Midjourney ...">
+      </div>
+      <div class="actions">
+        <button id="showAll" class="pill">সব দেখুন</button>
+        <button id="copyAll">তালিকা কপি করুন</button>
+        <button id="toggleHints">হিন্টস</button>
+      </div>
+    </div><div id="grid" class="grid" aria-live="polite"></div>
+
+  </main>  <footer>
+    <div class="container">Humayun Shariar Himu</div>
+  </footer>  <div id="modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3 id="modalTitle"></h3>
+      <p id="modalBody" style="color:var(--muted)"></p>
+      <div style="text-align:right;margin-top:12px">
+        <button id="closeModal">বন্ধ</button>
+      </div>
+    </div>
+  </div>  <script>
+    // Data (বাংলা): নাম এবং শর্ট বর্ণনা
+    const tools = [
+      {id:1,name:'ChatGPT',desc:'যেকোনো লেখা বা প্রশ্নের উত্তর দিতে পারে।'},
+      {id:2,name:'Canva AI',desc:'ডিজাইন তৈরি ও কনটেন্ট সাজাতে AI সহায়তা।'},
+      {id:3,name:'Pictory',desc:'লেখা থেকে অটো ভিডিও তৈরি করে।'},
+      {id:4,name:'Copy.ai',desc:'মার্কেটিং কপিরাইটিং বা ব্লগ লেখে।'},
+      {id:5,name:'Jasper AI',desc:'ব্লগ, বিজ্ঞাপন, ইমেইল লেখায় সাহায্য করে।'},
+      {id:6,name:'Grammarly',desc:'ইংরেজি লেখার ভুল ধরিয়ে সংশোধন করে।'},
+      {id:7,name:'Quillbot',desc:'লেখাকে রি-রাইট বা প্যারাফ্রেজ করে।'},
+      {id:8,name:'Synthesia',desc:'AI এভাটার দিয়ে ভিডিও বানায়।'},
+      {id:9,name:'Looka',desc:'লোগো ও ব্র্যান্ড ডিজাইন করে।'},
+      {id:10,name:'Remove.bg',desc:'ছবির ব্যাকগ্রাউন্ড রিমুভ করে এক ক্লিকে।'},
+      {id:11,name:'Leonardo AI',desc:'কল্পনাশক্তির ইমেজ ডিজাইন করে।'},
+      {id:12,name:'Durable',desc:'কয়েক সেকেন্ডে ওয়েবসাইট তৈরি করে।'},
+      {id:13,name:'SlidesAI',desc:'লেখা থেকে অটো স্লাইড প্রেজেন্টেশন বানায়।'},
+      {id:14,name:'Runway ML',desc:'ভিডিও এডিটিং ও AI ভিজ্যুয়াল এফেক্টে সাহায্য করে।'},
+      {id:15,name:'Tome',desc:'স্টোরি-বেইজড প্রেজেন্টেশন তৈরি করে।'},
+      {id:16,name:'Notion AI',desc:'নোট নেয়া, টাস্ক ম্যানেজমেন্ট ও লেখায় সাহায্য করে।'},
+      {id:17,name:'Krisp',desc:'কলের ব্যাকগ্রাউন্ড নোইজ রিমুভ করে।'},
+      {id:18,name:'Cleanup.pictures',desc:'ছবির অবাঞ্চিত জিনিস মুছে ফেলে।'},
+      {id:19,name:'Replika',desc:'AI ভার্চুয়াল বন্ধু বা চ্যাট সঙ্গী।'},
+      {id:20,name:'Soundraw',desc:'AI দিয়ে অরিজিনাল মিউজিক তৈরি করে।'},
+      {id:21,name:'Beatoven',desc:'ভিডিও/পডকাস্টের জন্য মিউজিক তৈরি করে।'},
+      {id:22,name:'Voicemod',desc:'ভয়েস চেঞ্জ বা ভয়েস ইফেক্টে ইউজ হয়।'},
+      {id:23,name:'Lumen5',desc:'ব্লগ থেকে ভিডিও কনভার্ট করে।'},
+      {id:24,name:'Descript',desc:'ভিডিও এডিট করে টেক্সট দিয়ে।'},
+      {id:25,name:'Kaiber',desc:'AI দিয়ে ভিডিও অ্যানিমেশন বানায়।'},
+      {id:26,name:'AutoDraw',desc:'হ্যান্ড-ড্রয়িংকে পারফেক্ট ডিজাইনে রূপ দেয়।'},
+      {id:27,name:'ElevenLabs',desc:'রিয়েলিস্টিক ভয়েস জেনারেশন করে।'},
+      {id:28,name:'Heygen',desc:'AI স্পোকেন ভিডিও বানায় ফেস ও ভয়েস দিয়ে।'},
+      {id:29,name:'Writesonic',desc:'কনটেন্ট রাইটিং ও কপি তৈরি করে।'},
+      {id:30,name:'Play.ht',desc:'ব্লগ বা লেখাকে ভয়েসে পরিণত করে।'},
+      {id:31,name:'Papercup',desc:'ভিডিওর ভয়েস অন্য ভাষায় ডাব করে।'},
+      {id:32,name:'AI Dungeon',desc:'ইন্টার‍্যাকটিভ গল্প বানায়।'},
+      {id:33,name:'TTSMaker',desc:'লেখা থেকে স্পিচ জেনারেট করে।'},
+      {id:34,name:'Magic Eraser',desc:'ছবির অবজেক্ট সরিয়ে ক্লিন ব্যাকগ্রাউন্ড দেয়।'},
+      {id:35,name:'Designs.ai',desc:'লোগো, ভিডিও, অডিও সব তৈরি করতে পারে।'},
+      {id:36,name:'Midjourney',desc:'কমান্ড থেকে ইমেজ তৈরি করে।'},
+      {id:37,name:'TinyWow',desc:'ডকুমেন্ট, ভিডিও, পিডিএফ টুলস ফ্রি অফার করে।'},
+      {id:38,name:'ChatPDF',desc:'যেকোনো PDF পড়ে আপনাকে সারাংশ দেয়।'},
+    ];
+
+    const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('searchInput');
+    const showAllBtn = document.getElementById('showAll');
+    const copyAllBtn = document.getElementById('copyAll');
+    const toggleHints = document.getElementById('toggleHints');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeModal = document.getElementById('closeModal');
+
+    function render(list){
+      grid.innerHTML = '';
+      list.forEach(tool=>{
+        const card = document.createElement('article');card.className='card';
+        card.innerHTML = `
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="badge">${tool.id}</div>
+            <div style="flex:1">
+              <h3>${tool.name}</h3>
+              <div class="meta">${tool.desc}</div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn" onclick="openSearch('${encodeURIComponent(tool.name)}')">অনুসন্ধান</button>
+            <button class="btn primary" onclick="openDetails(${tool.id})">বিস্তারিত</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      })
+    }
+
+    function openSearch(q){
+      const url = `https://www.google.com/search?q=${q}`;
+      window.open(url,'_blank');
+    }
+
+    function openDetails(id){
+      const t = tools.find(x=>x.id===id);
+      modalTitle.textContent = t.name;
+      modalBody.textContent = t.desc + '\n\nসহজ টিপস: এই টুল দিয়ে কী করতে পারেন তা দ্রুত খুঁজুন — উদাহরণ: "How to use '+t.name+' for marketing"';
+      modal.classList.add('open');
+    }
+
+    closeModal.addEventListener('click',()=>modal.classList.remove('open'));
+    modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('open')});
+
+    // Search
+    searchInput.addEventListener('input',e=>{
+      const q = e.target.value.trim().toLowerCase();
+      if(!q) return render(tools);
+      const filtered = tools.filter(t=> (t.name+ ' ' + t.desc).toLowerCase().includes(q));
+      render(filtered);
+    });
+
+    showAllBtn.addEventListener('click',()=>{searchInput.value='';render(tools);searchInput.focus();});
+
+    copyAllBtn.addEventListener('click',async()=>{
+      const text = tools.map(t=>`${t.id}. ${t.name} — ${t.desc}`).join('\n');
+      try{await navigator.clipboard.writeText(text); alert('তালিকা কপি হয়েছে ক্লিপবোর্ডে');}
+      catch(e){prompt('কপি করুন (Ctrl+C):',text)}
+    });
+
+    toggleHints.addEventListener('click',()=>{
+      modalTitle.textContent = 'দ্রুত টিপস';
+      modalBody.textContent = `- ChatGPT: আইডিয়া জেনারেট, রাইটিং, কোড সহায়তা\n- Canva AI / Leonardo / Midjourney: ভিজ্যুয়াল আইডিয়া\n- Pictory / Lumen5 / Descript: ভিডিও তৈরিতে দ্রুততা\n- ElevenLabs / Play.ht: রিয়ালিস্টিক ভয়েস\nঅনুবাদ বা কন্টেন্ট কাস্টমাইজ করতে টুলগুলো একসাথে ব্যবহার করুন।`;
+      modal.classList.add('open');
+    });
+
+    // Initial render
+    render(tools);
+
+    // Expose for inline handlers
+    window.openSearch = openSearch; window.openDetails = openDetails;
+  </script></body>
+</html>
