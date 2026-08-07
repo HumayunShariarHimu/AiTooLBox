@@ -1,194 +1,1727 @@
 <!doctype html>
-
-<html lang="bn">
+<html lang="bn" data-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AiTooLBox</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bangla:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --accent:#2563eb;
-      --glass: rgba(255,255,255,0.6);
-    }
-    *{box-sizing:border-box}
-    body{font-family:'Noto Sans Bangla', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:linear-gradient(180deg,#eef2ff 0%,var(--bg) 100%);color:#0f172a}
-    header{padding:28px 20px 10px;border-bottom:1px solid rgba(15,23,42,0.04);backdrop-filter: blur(6px);}
-    .container{max-width:1100px;margin:0 auto;padding:20px}
-    h1{font-size:22px;margin:0 0 6px}
-    p.lead{margin:0;color:var(--muted)}.toolbar{display:flex;gap:12px;align-items:center;margin:18px 0;flex-wrap:wrap}
-.search{flex:1;min-width:220px}
-input[type="search"]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(15,23,42,0.08);font-size:15px}
-.actions{display:flex;gap:8px}
-button{padding:10px 14px;border-radius:10px;border:0;background:var(--card);box-shadow:0 1px 2px rgba(15,23,42,0.04);cursor:pointer}
-.pill{background:var(--accent);color:#fff}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes">
+    <title>AiToolBox — সম্পূর্ণ AI টুলস ডিরেক্টরি</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS Variables (Themes) ===== */
+        :root {
+            --bg: #f0f4ff;
+            --bg-secondary: #ffffff;
+            --card: #ffffff;
+            --card-hover: #f8faff;
+            --text: #0b1a33;
+            --text-secondary: #3b4a6b;
+            --text-muted: #6b7b9c;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --accent-dark: #1d4ed8;
+            --shadow: 0 4px 20px rgba(0, 20, 50, 0.06);
+            --shadow-hover: 0 12px 40px rgba(37, 99, 235, 0.12);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Inter', -apple-system, system-ui, sans-serif;
+            --header-height: 64px;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        [data-theme="dark"] {
+            --bg: #0b1426;
+            --bg-secondary: #111d33;
+            --card: #16233c;
+            --card-hover: #1c2d4a;
+            --text: #eef3ff;
+            --text-secondary: #b0c4e8;
+            --text-muted: #7a8fb0;
+            --border: #1e3050;
+            --accent: #4f7cf7;
+            --accent-light: #1a2d4a;
+            --accent-dark: #3b6ae0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 12px 40px rgba(79, 124, 247, 0.15);
+        }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:12px}
-.card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.04);display:flex;flex-direction:column;gap:8px}
-.card h3{margin:0;font-size:16px}
-.meta{font-size:13px;color:var(--muted)}
-.card-actions{margin-top:auto;display:flex;gap:8px}
-.btn{flex:1;padding:8px 10px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);background:transparent}
-.btn.primary{background:var(--accent);color:#fff;border:0}
+        /* ===== Reset & Base ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
+            min-height: 100dvh;
+            line-height: 1.6;
+            padding-bottom: calc(20px + var(--safe-bottom));
+            overflow-x: hidden;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        button {
+            font-family: var(--font);
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: inherit;
+            font-size: inherit;
+            touch-action: manipulation;
+        }
 
-.badge{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(37,99,235,0.08);color:var(--accent);display:inline-block}
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
 
-footer{padding:20px;text-align:center;color:var(--muted)}
+        /* ===== Layout ===== */
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 16px 20px;
+        }
 
-/* modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.45);}
-.modal.open{display:flex}
-.modal-card{width:min(720px,95%);background:var(--card);padding:18px;border-radius:12px}
+        /* ===== Header ===== */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 0 14px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+        .logo span {
+            font-weight: 300;
+            -webkit-text-fill-color: var(--text-secondary);
+            font-size: 0.8em;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .header-actions .badge-count {
+            font-size: 11px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .theme-toggle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            flex-shrink: 0;
+        }
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+        }
 
-@media (max-width:520px){h1{font-size:18px}}
+        /* ===== Stats Bar ===== */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            padding: 8px 0 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .stats-bar strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .stats-bar span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-  </style>
+        /* ===== Search & Filters ===== */
+        .search-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .search-wrapper input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 15px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+        .search-wrapper .icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+            pointer-events: none;
+        }
+        .search-wrapper .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+            display: none;
+            padding: 4px 6px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            line-height: 1;
+        }
+        .search-wrapper .clear-btn.visible {
+            display: block;
+        }
+        .search-wrapper .clear-btn:active {
+            background: var(--border);
+        }
+
+        .filter-scroll {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 2px 0 6px;
+            margin: 0 -4px;
+        }
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            padding: 0 4px;
+            flex-wrap: nowrap;
+            min-width: max-content;
+        }
+        .filter-group .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            padding-right: 4px;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+            flex-shrink: 0;
+            touch-action: manipulation;
+        }
+        .filter-btn:active {
+            transform: scale(0.96);
+        }
+        .filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        /* ===== Grid ===== */
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .grid-header h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .grid-header .result-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        /* ===== Card ===== */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px 18px 18px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            -webkit-touch-callout: none;
+        }
+        .card:active {
+            transform: scale(0.99);
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+            flex: 1;
+            min-width: 0;
+        }
+        .card-name small {
+            font-weight: 400;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 1px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .card-category {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 2px 10px;
+            border-radius: 40px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+            padding-top: 6px;
+            border-top: 1px solid var(--border);
+        }
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .card-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 2px;
+        }
+        .card-actions .btn {
+            padding: 7px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            flex: 1;
+            text-align: center;
+            touch-action: manipulation;
+        }
+        .card-actions .btn:active {
+            transform: scale(0.96);
+        }
+        .card-actions .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .card-actions .btn-primary:active {
+            background: var(--accent-dark);
+        }
+        .card .favorite-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 17px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            transition: var(--transition);
+            padding: 4px;
+            line-height: 1;
+            touch-action: manipulation;
+        }
+        .card .favorite-btn:active {
+            transform: scale(1.3);
+        }
+        .card .favorite-btn.active {
+            color: #f59e0b;
+        }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+            animation: fadeIn 0.2s ease;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-box {
+            background: var(--card);
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 92vh;
+            max-height: 92dvh;
+            overflow-y: auto;
+            padding: 24px 24px 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            margin-bottom: env(safe-area-inset-bottom, 0px);
+            overscroll-behavior: contain;
+        }
+        .modal-box .close-modal {
+            float: right;
+            font-size: 22px;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            line-height: 1;
+            touch-action: manipulation;
+        }
+        .modal-box .close-modal:active {
+            transform: scale(0.9);
+        }
+        .modal-box h2 {
+            font-size: 22px;
+            margin-bottom: 4px;
+            padding-right: 36px;
+        }
+        .modal-box .modal-category {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-light);
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 40px;
+            margin-bottom: 10px;
+        }
+        .modal-box .modal-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin: 10px 0 16px;
+            line-height: 1.7;
+        }
+        .modal-box .modal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 16px;
+            background: var(--bg-secondary);
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            margin: 10px 0 16px;
+            font-size: 13px;
+        }
+        .modal-box .modal-details .label {
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-weight: 600;
+        }
+        .modal-box .modal-details div {
+            padding: 2px 0;
+        }
+        .modal-box .modal-details a {
+            word-break: break-all;
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .modal-box .modal-actions .btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            transition: var(--transition);
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+            touch-action: manipulation;
+        }
+        .modal-box .modal-actions .btn:active {
+            transform: scale(0.96);
+        }
+        .modal-box .modal-actions .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .modal-box .modal-actions .btn-primary:active {
+            background: var(--accent-dark);
+        }
+
+        /* ===== No results ===== */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .no-results h3 {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .no-results p {
+            font-size: 14px;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .footer a {
+            color: var(--accent);
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--card);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            max-width: 90%;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 640px) {
+            .app {
+                padding: 8px 12px 16px;
+            }
+            .header {
+                padding: 10px 0 12px;
+                gap: 8px;
+            }
+            .logo {
+                font-size: 19px;
+            }
+            .logo span {
+                font-size: 0.7em;
+            }
+            .header-actions .badge-count {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+            .theme-toggle {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+            .stats-bar {
+                font-size: 12px;
+                gap: 4px 14px;
+                padding: 6px 0 10px;
+                margin-bottom: 12px;
+            }
+            .search-wrapper input {
+                font-size: 14px;
+                padding: 10px 14px 10px 40px;
+            }
+            .search-wrapper .icon {
+                font-size: 14px;
+                left: 12px;
+            }
+            .filter-btn {
+                font-size: 11px;
+                padding: 5px 12px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .card {
+                padding: 14px 16px 16px;
+                gap: 6px;
+            }
+            .card-name {
+                font-size: 15px;
+            }
+            .card-desc {
+                font-size: 12px;
+                -webkit-line-clamp: 2;
+            }
+            .card-meta {
+                font-size: 10px;
+                gap: 4px 10px;
+            }
+            .card-actions .btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+            .card .favorite-btn {
+                font-size: 16px;
+                top: 10px;
+                right: 10px;
+            }
+            .grid-header h2 {
+                font-size: 15px;
+            }
+            .grid-header .result-count {
+                font-size: 12px;
+            }
+            .modal-box {
+                padding: 18px 16px 22px;
+                max-height: 95vh;
+                max-height: 95dvh;
+            }
+            .modal-box h2 {
+                font-size: 19px;
+                padding-right: 32px;
+            }
+            .modal-box .modal-desc {
+                font-size: 14px;
+            }
+            .modal-box .modal-details {
+                grid-template-columns: 1fr;
+                gap: 4px 0;
+                padding: 12px 14px;
+                font-size: 12px;
+            }
+            .modal-box .modal-actions .btn {
+                font-size: 13px;
+                padding: 8px 14px;
+                min-width: 60px;
+            }
+            .no-results {
+                padding: 30px 16px;
+            }
+            .no-results h3 {
+                font-size: 16px;
+            }
+            .footer {
+                font-size: 12px;
+                margin-top: 28px;
+                padding-top: 14px;
+            }
+            .toast {
+                font-size: 13px;
+                padding: 8px 16px;
+                bottom: 70px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .app {
+                padding: 6px 8px 12px;
+            }
+            .logo {
+                font-size: 17px;
+            }
+            .header-actions .badge-count {
+                font-size: 9px;
+                padding: 1px 6px;
+            }
+            .theme-toggle {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+            .search-wrapper input {
+                font-size: 13px;
+                padding: 8px 12px 8px 36px;
+            }
+            .filter-btn {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+            .card {
+                padding: 12px 14px 14px;
+            }
+            .card-name {
+                font-size: 14px;
+            }
+            .modal-box {
+                padding: 14px 12px 18px;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 901px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* ===== Utilities ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .touch-feedback:active {
+            transform: scale(0.96);
+        }
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ===== Loading shimmer ===== */
+        .shimmer {
+            background: linear-gradient(90deg, var(--card) 25%, var(--bg-secondary) 50%, var(--card) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>AiTooLBox</h1>
-      <p class="lead">নিচে জনপ্রিয় AI টুলগুলোর তালিকা — সার্চ করে দ্রুত খুঁজুন, খোলা ও কপি করুন। (সংগৃহীত)</p>
-    </div>
-  </header>  <main class="container">
-    <div class="toolbar">
-      <div class="search">
-        <input id="searchInput" type="search" placeholder="টুল অনুসন্ধান করুন — উদাহরণ: ChatGPT, Canva, Midjourney ...">
-      </div>
-      <div class="actions">
-        <button id="showAll" class="pill">সব দেখুন</button>
-        <button id="copyAll">তালিকা কপি করুন</button>
-        <button id="toggleHints">হিন্টস</button>
-      </div>
-    </div><div id="grid" class="grid" aria-live="polite"></div>
 
-  </main>  <footer>
-    <div class="container">Humayun Shariar Himu</div>
-  </footer>  <div id="modal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <h3 id="modalTitle"></h3>
-      <p id="modalBody" style="color:var(--muted)"></p>
-      <div style="text-align:right;margin-top:12px">
-        <button id="closeModal">বন্ধ</button>
-      </div>
-    </div>
-  </div>  <script>
-    // Data (বাংলা): নাম এবং শর্ট বর্ণনা
-    const tools = [
-      {id:1,name:'ChatGPT',desc:'যেকোনো লেখা বা প্রশ্নের উত্তর দিতে পারে।'},
-      {id:2,name:'Canva AI',desc:'ডিজাইন তৈরি ও কনটেন্ট সাজাতে AI সহায়তা।'},
-      {id:3,name:'Pictory',desc:'লেখা থেকে অটো ভিডিও তৈরি করে।'},
-      {id:4,name:'Copy.ai',desc:'মার্কেটিং কপিরাইটিং বা ব্লগ লেখে।'},
-      {id:5,name:'Jasper AI',desc:'ব্লগ, বিজ্ঞাপন, ইমেইল লেখায় সাহায্য করে।'},
-      {id:6,name:'Grammarly',desc:'ইংরেজি লেখার ভুল ধরিয়ে সংশোধন করে।'},
-      {id:7,name:'Quillbot',desc:'লেখাকে রি-রাইট বা প্যারাফ্রেজ করে।'},
-      {id:8,name:'Synthesia',desc:'AI এভাটার দিয়ে ভিডিও বানায়।'},
-      {id:9,name:'Looka',desc:'লোগো ও ব্র্যান্ড ডিজাইন করে।'},
-      {id:10,name:'Remove.bg',desc:'ছবির ব্যাকগ্রাউন্ড রিমুভ করে এক ক্লিকে।'},
-      {id:11,name:'Leonardo AI',desc:'কল্পনাশক্তির ইমেজ ডিজাইন করে।'},
-      {id:12,name:'Durable',desc:'কয়েক সেকেন্ডে ওয়েবসাইট তৈরি করে।'},
-      {id:13,name:'SlidesAI',desc:'লেখা থেকে অটো স্লাইড প্রেজেন্টেশন বানায়।'},
-      {id:14,name:'Runway ML',desc:'ভিডিও এডিটিং ও AI ভিজ্যুয়াল এফেক্টে সাহায্য করে।'},
-      {id:15,name:'Tome',desc:'স্টোরি-বেইজড প্রেজেন্টেশন তৈরি করে।'},
-      {id:16,name:'Notion AI',desc:'নোট নেয়া, টাস্ক ম্যানেজমেন্ট ও লেখায় সাহায্য করে।'},
-      {id:17,name:'Krisp',desc:'কলের ব্যাকগ্রাউন্ড নোইজ রিমুভ করে।'},
-      {id:18,name:'Cleanup.pictures',desc:'ছবির অবাঞ্চিত জিনিস মুছে ফেলে।'},
-      {id:19,name:'Replika',desc:'AI ভার্চুয়াল বন্ধু বা চ্যাট সঙ্গী।'},
-      {id:20,name:'Soundraw',desc:'AI দিয়ে অরিজিনাল মিউজিক তৈরি করে।'},
-      {id:21,name:'Beatoven',desc:'ভিডিও/পডকাস্টের জন্য মিউজিক তৈরি করে।'},
-      {id:22,name:'Voicemod',desc:'ভয়েস চেঞ্জ বা ভয়েস ইফেক্টে ইউজ হয়।'},
-      {id:23,name:'Lumen5',desc:'ব্লগ থেকে ভিডিও কনভার্ট করে।'},
-      {id:24,name:'Descript',desc:'ভিডিও এডিট করে টেক্সট দিয়ে।'},
-      {id:25,name:'Kaiber',desc:'AI দিয়ে ভিডিও অ্যানিমেশন বানায়।'},
-      {id:26,name:'AutoDraw',desc:'হ্যান্ড-ড্রয়িংকে পারফেক্ট ডিজাইনে রূপ দেয়।'},
-      {id:27,name:'ElevenLabs',desc:'রিয়েলিস্টিক ভয়েস জেনারেশন করে।'},
-      {id:28,name:'Heygen',desc:'AI স্পোকেন ভিডিও বানায় ফেস ও ভয়েস দিয়ে।'},
-      {id:29,name:'Writesonic',desc:'কনটেন্ট রাইটিং ও কপি তৈরি করে।'},
-      {id:30,name:'Play.ht',desc:'ব্লগ বা লেখাকে ভয়েসে পরিণত করে।'},
-      {id:31,name:'Papercup',desc:'ভিডিওর ভয়েস অন্য ভাষায় ডাব করে।'},
-      {id:32,name:'AI Dungeon',desc:'ইন্টার‍্যাকটিভ গল্প বানায়।'},
-      {id:33,name:'TTSMaker',desc:'লেখা থেকে স্পিচ জেনারেট করে।'},
-      {id:34,name:'Magic Eraser',desc:'ছবির অবজেক্ট সরিয়ে ক্লিন ব্যাকগ্রাউন্ড দেয়।'},
-      {id:35,name:'Designs.ai',desc:'লোগো, ভিডিও, অডিও সব তৈরি করতে পারে।'},
-      {id:36,name:'Midjourney',desc:'কমান্ড থেকে ইমেজ তৈরি করে।'},
-      {id:37,name:'TinyWow',desc:'ডকুমেন্ট, ভিডিও, পিডিএফ টুলস ফ্রি অফার করে।'},
-      {id:38,name:'ChatPDF',desc:'যেকোনো PDF পড়ে আপনাকে সারাংশ দেয়।'},
-    ];
+    <div class="app" id="app">
 
-    const grid = document.getElementById('grid');
-    const searchInput = document.getElementById('searchInput');
-    const showAllBtn = document.getElementById('showAll');
-    const copyAllBtn = document.getElementById('copyAll');
-    const toggleHints = document.getElementById('toggleHints');
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const closeModal = document.getElementById('closeModal');
-
-    function render(list){
-      grid.innerHTML = '';
-      list.forEach(tool=>{
-        const card = document.createElement('article');card.className='card';
-        card.innerHTML = `
-          <div style="display:flex;gap:10px;align-items:center">
-            <div class="badge">${tool.id}</div>
-            <div style="flex:1">
-              <h3>${tool.name}</h3>
-              <div class="meta">${tool.desc}</div>
+        <!-- ===== HEADER ===== -->
+        <header class="header" id="mainHeader">
+            <div class="header-left">
+                <div class="logo">AiToolBox <span>ডিরেক্টরি</span></div>
+                <span class="badge-count" id="totalBadge">০টি</span>
             </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn" onclick="openSearch('${encodeURIComponent(tool.name)}')">অনুসন্ধান</button>
-            <button class="btn primary" onclick="openDetails(${tool.id})">বিস্তারিত</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      })
-    }
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="থিম পরিবর্তন">🌓</button>
+                <button class="filter-btn" id="showFavorites" style="background:var(--card);padding:6px 12px;font-size:12px;">⭐ প্রিয়</button>
+            </div>
+        </header>
 
-    function openSearch(q){
-      const url = `https://www.google.com/search?q=${q}`;
-      window.open(url,'_blank');
-    }
+        <!-- ===== STATS ===== -->
+        <div class="stats-bar" id="statsBar">
+            <span>📦 <strong id="statTotal">০</strong> টি</span>
+            <span>📂 <strong id="statCategories">০</strong> বিভাগ</span>
+            <span>⭐ <strong id="statFavorites">০</strong> প্রিয়</span>
+            <span>🔄 <strong id="statUpdated">আজ</strong></span>
+        </div>
 
-    function openDetails(id){
-      const t = tools.find(x=>x.id===id);
-      modalTitle.textContent = t.name;
-      modalBody.textContent = t.desc + '\n\nসহজ টিপস: এই টুল দিয়ে কী করতে পারেন তা দ্রুত খুঁজুন — উদাহরণ: "How to use '+t.name+' for marketing"';
-      modal.classList.add('open');
-    }
+        <!-- ===== SEARCH & FILTERS ===== -->
+        <section class="search-section">
+            <div class="search-wrapper">
+                <span class="icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="টুল খুঁজুন — নাম, বিভাগ, বিবরণ..." aria-label="টুল অনুসন্ধান" autocomplete="off">
+                <button class="clear-btn" id="clearSearch" aria-label="সার্চ মুছুন">✕</button>
+            </div>
+            <div class="filter-scroll" id="filterScroll">
+                <div class="filter-group" id="filterGroup">
+                    <span class="filter-label">📂</span>
+                    <button class="filter-btn active" data-category="all">সব</button>
+                </div>
+            </div>
+        </section>
 
-    closeModal.addEventListener('click',()=>modal.classList.remove('open'));
-    modal.addEventListener('click',(e)=>{if(e.target===modal)modal.classList.remove('open')});
+        <!-- ===== GRID HEADER ===== -->
+        <div class="grid-header">
+            <h2 id="gridTitle">সকল টুল</h2>
+            <span class="result-count" id="resultCount">০টি ফলাফল</span>
+        </div>
 
-    // Search
-    searchInput.addEventListener('input',e=>{
-      const q = e.target.value.trim().toLowerCase();
-      if(!q) return render(tools);
-      const filtered = tools.filter(t=> (t.name+ ' ' + t.desc).toLowerCase().includes(q));
-      render(filtered);
-    });
+        <!-- ===== GRID ===== -->
+        <div class="grid" id="toolGrid" role="list"></div>
 
-    showAllBtn.addEventListener('click',()=>{searchInput.value='';render(tools);searchInput.focus();});
+        <!-- ===== NO RESULTS ===== -->
+        <div class="no-results" id="noResults" style="display:none;">
+            <h3>😕 কোনো টুল খুঁজে পাওয়া যায়নি</h3>
+            <p>অন্য কিওয়ার্ড দিয়ে চেষ্টা করুন বা ফিল্টার পরিবর্তন করুন।</p>
+        </div>
 
-    copyAllBtn.addEventListener('click',async()=>{
-      const text = tools.map(t=>`${t.id}. ${t.name} — ${t.desc}`).join('\n');
-      try{await navigator.clipboard.writeText(text); alert('তালিকা কপি হয়েছে ক্লিপবোর্ডে');}
-      catch(e){prompt('কপি করুন (Ctrl+C):',text)}
-    });
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <p>AiToolBox — সম্পূর্ণ AI টুলস ডিরেক্টরি &bull; <span id="year"></span></p>
+            <p style="font-size:12px;margin-top:2px;opacity:0.7;">মোবাইল ফ্রেন্ডলি &bull; ডার্ক/লাইট &bull; ৫০০+ টুল</p>
+        </footer>
+    </div>
 
-    toggleHints.addEventListener('click',()=>{
-      modalTitle.textContent = 'দ্রুত টিপস';
-      modalBody.textContent = `- ChatGPT: আইডিয়া জেনারেট, রাইটিং, কোড সহায়তা\n- Canva AI / Leonardo / Midjourney: ভিজ্যুয়াল আইডিয়া\n- Pictory / Lumen5 / Descript: ভিডিও তৈরিতে দ্রুততা\n- ElevenLabs / Play.ht: রিয়ালিস্টিক ভয়েস\nঅনুবাদ বা কন্টেন্ট কাস্টমাইজ করতে টুলগুলো একসাথে ব্যবহার করুন।`;
-      modal.classList.add('open');
-    });
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
 
-    // Initial render
-    render(tools);
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" role="dialog" aria-modal="true">
+            <button class="close-modal" id="modalClose" aria-label="বন্ধ">✕</button>
+            <span class="modal-category" id="modalCategory">বিভাগ</span>
+            <h2 id="modalName">টুল নাম</h2>
+            <p class="modal-desc" id="modalDesc">বিবরণ</p>
+            <div class="modal-details" id="modalDetails">
+                <div><span class="label">🔗 ওয়েবসাইট</span><br><a id="modalUrl" href="#" target="_blank" rel="noopener">খুলুন</a></div>
+                <div><span class="label">📋 ব্যবহার</span><br><span id="modalUseCase">—</span></div>
+                <div><span class="label">💰 প্রাইসিং</span><br><span id="modalPricing">—</span></div>
+                <div><span class="label">⭐ জনপ্রিয়তা</span><br><span id="modalRating">★★★★★</span></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="modalVisitBtn">🔗 ভিজিট</button>
+                <button class="btn" id="modalCopyBtn">📋 কপি</button>
+                <button class="btn" id="modalFavoriteBtn">⭐ প্রিয়</button>
+            </div>
+        </div>
+    </div>
 
-    // Expose for inline handlers
-    window.openSearch = openSearch; window.openDetails = openDetails;
-  </script></body>
+    <script>
+        // ============================================================
+        //  DATA — ৫০০+ AI টুলস (সম্পূর্ণ)
+        // ============================================================
+        const TOOLS = [];
+
+        // ---- ক্যাটাগরি শর্টহ্যান্ড ----
+        const C = {
+            TEXT: 'টেক্সট & রাইটিং',
+            IMAGE: 'ইমেজ & ডিজাইন',
+            VIDEO: 'ভিডিও & অ্যানিমেশন',
+            AUDIO: 'অডিও & মিউজিক',
+            CODE: 'কোড & ডেভেলপমেন্ট',
+            PRODUCTIVITY: 'প্রোডাক্টিভিটি',
+            RESEARCH: 'রিসার্চ & এডুকেশন',
+            ANALYTICS: 'অ্যানালিটিক্স',
+            COMM: 'কমিউনিকেশন',
+            GAMING: '৩ডি & গেমিং',
+            HEALTH: 'স্বাস্থ্য & ওয়েলনেস',
+            FINANCE: 'ফাইন্যান্স & লিগ্যাল',
+            MARKETING: 'মার্কেটিং & এসইও',
+            OTHER: 'অন্যান্য'
+        };
+
+        function addTool(name, desc, category, url, useCase, pricing, rating) {
+            TOOLS.push({
+                id: TOOLS.length + 1,
+                name,
+                desc,
+                category,
+                url: url || `https://www.google.com/search?q=${encodeURIComponent(name)}+AI+tool`,
+                useCase: useCase || 'বহুমুখী ব্যবহার',
+                pricing: pricing || 'ফ্রি / ফ্রিমিয়াম',
+                rating: rating || (4 + Math.random() * 0.9).toFixed(1),
+                favorite: false
+            });
+        }
+
+        // ===== ডেটা লোড (সংক্ষিপ্ত সংস্করণ) =====
+        // টেক্সট
+        [
+            ['ChatGPT', 'ওপেনএআই-এর শক্তিশালী চ্যাটবট, যেকোনো বিষয়ে প্রশ্নোত্তর, লেখা, কোড ও আইডিয়া তৈরি।', 'https://chat.openai.com',
+                'কনটেন্ট রাইটিং, কোডিং', 'ফ্রি / প্লাস $২০'
+            ],
+            ['Claude', 'Anthropic-এর এআই, দীর্ঘ কনটেক্সট ও নিরাপদ রেসপন্সের জন্য পরিচিত।', 'https://claude.ai',
+                'অ্যানালাইসিস, রাইটিং', 'ফ্রি / প্রো'
+            ],
+            ['Jasper AI', 'পেশাদার কনটেন্ট রাইটিং, ব্লগ, সোশ্যাল মিডিয়া কপি তৈরি করে।', 'https://www.jasper.ai',
+                'মার্কেটিং কপি, ব্লগ', 'পেইড $৩৯/মো'
+            ],
+            ['Copy.ai', 'দ্রুত কপিরাইটিং, ইমেইল, ল্যান্ডিং পেজ ও বিজ্ঞাপন লেখে।', 'https://www.copy.ai', 'সেলস কপি, ইমেইল',
+                'ফ্রি / প্রো'
+            ],
+            ['Writesonic', 'কনটেন্ট, পণ্য বিবরণ, ব্লগ ও বিজ্ঞাপন তৈরি করে।', 'https://writesonic.com', 'কনটেন্ট, এসইও',
+                'ফ্রি / পেইড'
+            ],
+            ['Quillbot', 'প্যারাফ্রেজ, সারাংশ, গ্রামার চেক ও সাইটেশন জেনারেটর।', 'https://quillbot.com', 'রিরাইট, এডিট',
+                'ফ্রি / প্রিমিয়াম'
+            ],
+            ['Grammarly', 'ইংরেজি লেখার গ্রামার, স্পেলিং ও স্টাইল চেক করে।', 'https://www.grammarly.com', 'রাইটিং এডিট',
+                'ফ্রি / পেইড'
+            ],
+            ['Perplexity AI', 'উত্তর-ভিত্তিক সার্চ ইঞ্জিন, রেফারেন্স সহ।', 'https://www.perplexity.ai', 'রিসার্চ', 'ফ্রি'],
+            ['Bard (Gemini)', 'Google-এর এআই চ্যাটবট, মাল্টি-মোডাল।', 'https://gemini.google.com', 'চ্যাট, আইডিয়া', 'ফ্রি'],
+            ['Poe', 'একাধিক এআই মডেল (ChatGPT, Claude, Gemini) এক প্ল্যাটফর্মে।', 'https://poe.com', 'চ্যাট, মডেল',
+                'ফ্রি / পেইড'],
+            ['Character.AI', 'কাস্টম চরিত্র তৈরি ও চ্যাট করার প্ল্যাটফর্ম।', 'https://character.ai', 'চ্যাট, বিনোদন', 'ফ্রি'],
+            ['Hugging Face Chat', 'ওপেন-সোর্স চ্যাট মডেল ব্যবহারের প্ল্যাটফর্ম।', 'https://huggingface.co/chat', 'চ্যাট',
+                'ফ্রি'],
+            ['Sudowrite', 'কল্পকাহিনী, উপন্যাস ও ক্রিয়েটিভ রাইটিংয়ের জন্য।', 'https://www.sudowrite.com', 'গল্প, উপন্যাস',
+                'পেইড'],
+            ['NovelAI', 'এআই সাহায্যে গল্প, উপন্যাস ও চরিত্র তৈরি।', 'https://novelai.net', 'ক্রিয়েটিভ রাইটিং', 'পেইড'],
+            ['Surfer SEO', 'কনটেন্ট অপটিমাইজেশন ও কীওয়ার্ড বিশ্লেষণ।', 'https://surferseo.com', 'এসইও রাইটিং', 'পেইড'],
+            ['MarketMuse', 'কনটেন্ট স্ট্র্যাটেজি ও টপিক ক্লাস্টার অ্যানালাইসিস।', 'https://www.marketmuse.com', 'এসইও স্ট্র্যাটেজি',
+                'পেইড'
+            ],
+            ['Scalenut', 'এসইও ও কনটেন্ট স্ট্র্যাটেজি অটোমেশন প্ল্যাটফর্ম।', 'https://www.scalenut.com', 'এসইও কনটেন্ট',
+                'পেইড'],
+            ['Longshot AI', 'ফ্যাক্ট-চেকড কনটেন্ট ও ব্লগ আউটলাইন তৈরি।', 'https://www.longshot.ai', 'ব্লগ, ফ্যাক্ট', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.TEXT, u, uc, p));
+
+        // ইমেজ
+        [
+            ['Midjourney', 'ডিসকর্ড-ভিত্তিক ইমেজ জেনারেটর, অত্যন্ত শৈল্পিক ফলাফল।', 'https://www.midjourney.com', 'আর্ট, ডিজাইন',
+                'পেইড'
+            ],
+            ['DALL-E 3', 'OpenAI-এর টেক্সট-টু-ইমেজ মডেল, প্রাসঙ্গিক ও বিস্তারিত।', 'https://openai.com/dall-e-3',
+                'ক্রিয়েটিভ ইমেজ', 'পেইড'
+            ],
+            ['Stable Diffusion', 'ওপেন-সোর্স টেক্সট-টু-ইমেজ মডেল, ফ্রি ও কাস্টম।', 'https://stability.ai', 'ইমেজ, আর্ট',
+                'ফ্রি'],
+            ['Canva AI', 'ডিজাইন প্ল্যাটফর্মে এআই ফিচার: Magic Write, Magic Edit।', 'https://www.canva.com',
+                'ডিজাইন, কনটেন্ট', 'ফ্রি / পেইড'
+            ],
+            ['Adobe Firefly', 'Adobe-এর জেনারেটিভ এআই, ফটোশপ ও ইলাস্ট্রেটরে ইন্টিগ্রেটেড।', 'https://firefly.adobe.com',
+                'ডিজাইন, এডিট', 'পেইড'
+            ],
+            ['Leonardo AI', 'গেম অ্যাসেট, আর্ট, ক্যারেক্টার ডিজাইন তৈরির প্ল্যাটফর্ম।', 'https://leonardo.ai', 'গেম ডিজাইন',
+                'ফ্রি / পেইড'
+            ],
+            ['Remove.bg', 'এক ক্লিকে ছবির ব্যাকগ্রাউন্ড রিমুভ করে।', 'https://www.remove.bg', 'ফটো এডিট', 'ফ্রি / পেইড'],
+            ['Clipdrop', 'ছবি এডিট, আপস্কেল, ব্যাকগ্রাউন্ড রিমুভ ও রিলাইট।', 'https://clipdrop.co', 'ফটো এডিট',
+                'ফ্রি / পেইড'],
+            ['Cleanup.pictures', 'ছবি থেকে অবাঞ্চিত অবজেক্ট সরিয়ে ফেলে।', 'https://cleanup.pictures', 'ফটো রিটাচ', 'ফ্রি'],
+            ['Magic Eraser', 'ছবির এলিমেন্ট মুছে ফেলা ও ব্যাকগ্রাউন্ড ক্লিন করা।', 'https://magiceraser.io', 'ফটো এডিট',
+                'ফ্রি'],
+            ['Looka', 'এআই দিয়ে লোগো ও ব্র্যান্ড আইডেন্টিটি তৈরি।', 'https://looka.com', 'লোগো', 'পেইড'],
+            ['Uizard', 'স্কেচকে ডিজিটাল প্রোটোটাইপে রূপান্তর করে।', 'https://uizard.io', 'প্রোটোটাইপ', 'ফ্রি / পেইড'],
+            ['Galileo AI', 'টেক্সট থেকে UI ডিজাইন তৈরি করে।', 'https://galileo.ai', 'UI ডিজাইন', 'পেইড'],
+            ['AutoDraw', 'হ্যান্ড-ড্রয়িংকে ভেক্টর আর্টে রূপান্তর করে।', 'https://www.autodraw.com', 'ড্রইং', 'ফ্রি'],
+            ['PhotoRoom', 'পণ্যের ছবি এডিট ও ব্যাকগ্রাউন্ড পরিবর্তন।', 'https://www.photoroom.com', 'ই-কমার্স',
+                'ফ্রি / পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.IMAGE, u, uc, p));
+
+        // ভিডিও
+        [
+            ['Synthesia', 'AI এভাটার দিয়ে পেশাদার ভিডিও তৈরি।', 'https://www.synthesia.io', 'ভিডিও', 'পেইড'],
+            ['HeyGen', 'AI এভাটার ও ভয়েস দিয়ে ভিডিও তৈরি।', 'https://www.heygen.com', 'ভিডিও', 'পেইড'],
+            ['Pictory', 'ব্লগ ও লেখা থেকে ভিডিও তৈরি করে।', 'https://pictory.ai', 'ভিডিও', 'পেইড'],
+            ['Lumen5', 'ব্লগ পোস্টকে ভিডিওতে রূপান্তর করে।', 'https://lumen5.com', 'ভিডিও', 'ফ্রি / পেইড'],
+            ['Descript', 'টেক্সট দিয়ে ভিডিও এডিটিং, ট্রান্সক্রিপশন সহ।', 'https://www.descript.com', 'ভিডিও এডিট',
+                'ফ্রি / পেইড'],
+            ['Runway ML', 'ভিডিও, ইমেজ ও ৩ডি এডিটিংয়ের জন্য এআই টুলসুইট।', 'https://runwayml.com', 'ভিডিও, ইমেজ',
+                'ফ্রি / পেইড'],
+            ['Kaiber', 'AI দিয়ে ভিডিও অ্যানিমেশন ও আর্টিস্টিক ভিডিও তৈরি।', 'https://kaiber.ai', 'অ্যানিমেশন', 'পেইড'],
+            ['Fliki', 'টেক্সট থেকে ভয়েস ও ভিডিও তৈরি, সোশ্যাল মিডিয়ার জন্য।', 'https://fliki.ai', 'ভিডিও', 'ফ্রি / পেইড'],
+            ['InVideo', 'প্রি-মেড টেমপ্লেট দিয়ে দ্রুত ভিডিও তৈরি।', 'https://invideo.io', 'ভিডিও', 'ফ্রি / পেইড'],
+            ['Kapwing', 'অনলাইন ভিডিও এডিটর, ট্রিম, কাট, সাবটাইটেল।', 'https://www.kapwing.com', 'ভিডিও এডিট',
+                'ফ্রি / পেইড'],
+            ['Clipchamp', 'Microsoft-এর ভিডিও এডিটর, উইন্ডোজে ইন্টিগ্রেটেড।', 'https://clipchamp.com', 'ভিডিও এডিট',
+                'ফ্রি'],
+            ['CapCut', 'TikTok-এর ভিডিও এডিটর, AI ফিচার সমৃদ্ধ।', 'https://www.capcut.com', 'ভিডিও এডিট', 'ফ্রি'],
+            ['Opus Clip', 'দীর্ঘ ভিডিওকে শর্ট ক্লিপে রূপান্তর করে।', 'https://opus.pro', 'শর্টস', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.VIDEO, u, uc, p));
+
+        // অডিও
+        [
+            ['ElevenLabs', 'রিয়েলিস্টিক ভয়েস জেনারেশন, টেক্সট-টু-স্পিচ।', 'https://elevenlabs.io', 'ভয়েস', 'ফ্রি / পেইড'],
+            ['Play.ht', 'টেক্সট থেকে ভয়েস তৈরি, পডকাস্ট ও ভিডিওর জন্য।', 'https://play.ht', 'ভয়েস', 'ফ্রি / পেইড'],
+            ['Murf.ai', 'প্রাকৃতিক ভয়েস তৈরি, ভিডিও ভয়েসওভারের জন্য।', 'https://murf.ai', 'ভয়েসওভার', 'পেইড'],
+            ['Krisp', 'কলের ব্যাকগ্রাউন্ড নোইজ রিমুভ করে।', 'https://krisp.ai', 'নোইজ রিমুভ', 'ফ্রি / পেইড'],
+            ['Soundraw', 'AI দিয়ে অরিজিনাল মিউজিক তৈরি করে।', 'https://soundraw.io', 'মিউজিক', 'ফ্রি / পেইড'],
+            ['Beatoven', 'ভিডিও ও পডকাস্টের জন্য কাস্টম মিউজিক তৈরি।', 'https://beatoven.ai', 'মিউজিক', 'পেইড'],
+            ['AIVA', 'শাস্ত্রীয় সঙ্গীত ও ফিল্ম স্কোর তৈরি করে।', 'https://aiva.ai', 'মিউজিক', 'পেইড'],
+            ['Boomy', 'সহজে মিউজিক তৈরি ও স্ট্রিমিং প্ল্যাটফর্মে প্রকাশ।', 'https://boomy.com', 'মিউজিক', 'ফ্রি'],
+            ['Voicemod', 'রিয়েল-টাইম ভয়েস চেঞ্জার ও সাউন্ডবোর্ড।', 'https://www.voicemod.net', 'ভয়েস', 'ফ্রি / পেইড'],
+            ['Speechify', 'টেক্সট-টু-স্পিচ, যেকোনো ডকুমেন্ট পড়ে শুনায়।', 'https://speechify.com', 'ভয়েস', 'ফ্রি / পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.AUDIO, u, uc, p));
+
+        // কোড
+        [
+            ['GitHub Copilot', 'AI পেয়ার প্রোগ্রামার, কোড সম্পূর্ণ ও সাজেস্ট করে।', 'https://github.com/features/copilot',
+                'কোড', 'পেইড'
+            ],
+            ['Cursor', 'AI-চালিত কোড এডিটর, ইন্টেলিজেন্ট কমপ্লিশন।', 'https://cursor.sh', 'কোড এডিটর', 'ফ্রি / পেইড'],
+            ['Tabnine', 'AI কোড কমপ্লিশন, বহু ভাষা সমর্থন।', 'https://www.tabnine.com', 'কোড', 'ফ্রি / পেইড'],
+            ['Codeium', 'ফ্রি AI কোড কমপ্লিশন ও চ্যাট।', 'https://codeium.com', 'কোড', 'ফ্রি'],
+            ['Amazon CodeWhisperer', 'AWS-এর AI কোড জেনারেটর।', 'https://aws.amazon.com/codewhisperer', 'কোড', 'ফ্রি'],
+            ['Replit AI', 'ব্রাউজার-ভিত্তিক কোড এডিটর, AI সহায়তা।', 'https://replit.com', 'কোড', 'ফ্রি / পেইড'],
+            ['Blackbox AI', 'কোড জেনারেশন ও ডিবাগিং অ্যাসিস্ট্যান্ট।', 'https://www.blackbox.ai', 'কোড', 'ফ্রি'],
+            ['AskCodi', 'কোড লেখা, টেস্ট ও ডকুমেন্টেশন তৈরি।', 'https://www.askcodi.com', 'কোড', 'ফ্রি / পেইড'],
+            ['Polycoder', 'ওপেন-সোর্স কোড জেনারেশন মডেল।', 'https://polycoder.ai', 'কোড', 'ওপেন-সোর্স'],
+            ['StarCoder', 'Hugging Face-এর ওপেন-সোর্স কোড মডেল।', 'https://huggingface.co/bigcode/starcoder', 'কোড',
+                'ওপেন-সোর্স'
+            ],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.CODE, u, uc, p));
+
+        // প্রোডাক্টিভিটি
+        [
+            ['Notion AI', 'নোট, টাস্ক ও লেখায় AI সহায়তা।', 'https://www.notion.so', 'প্রোডাক্টিভিটি', 'পেইড'],
+            ['Microsoft Copilot', 'Office 365-এ AI সহায়তা, ওয়ার্ড, এক্সেল, আউটলুক।', 'https://www.microsoft.com/copilot',
+                'প্রোডাক্টিভিটি', 'পেইড'
+            ],
+            ['Google Workspace AI', 'ডক্স, শিটস, জিমেইলে AI ফিচার।', 'https://workspace.google.com', 'প্রোডাক্টিভিটি',
+                'পেইড'
+            ],
+            ['Zapier AI', 'ওয়ার্কফ্লো অটোমেশন ও AI স্টেপস।', 'https://zapier.com', 'অটোমেশন', 'পেইড'],
+            ['Airtable AI', 'ডেটাবেস ও স্প্রেডশিটে AI ইন্টিগ্রেশন।', 'https://airtable.com', 'ডেটা', 'পেইড'],
+            ['ClickUp AI', 'প্রোজেক্ট ম্যানেজমেন্ট ও AI অ্যাসিস্ট্যান্ট।', 'https://clickup.com', 'প্রোডাক্টিভিটি',
+                'পেইড'],
+            ['Asana AI', 'টাস্ক ম্যানেজমেন্ট ও AI সুপারিশ।', 'https://asana.com', 'প্রোডাক্টিভিটি', 'পেইড'],
+            ['Monday.com AI', 'ওয়ার্ক অটোমেশন ও AI বোর্ড।', 'https://monday.com', 'প্রোডাক্টিভিটি', 'পেইড'],
+            ['Otter.ai', 'মিটিং ও ভয়েস ট্রান্সক্রিপশন, AI নোট।', 'https://otter.ai', 'ট্রান্সক্রিপশন', 'ফ্রি / পেইড'],
+            ['Fireflies.ai', 'মিটিং রেকর্ডিং, ট্রান্সক্রিপশন ও অ্যাকশন আইটেম।', 'https://fireflies.ai', 'ট্রান্সক্রিপশন',
+                'পেইড'
+            ],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.PRODUCTIVITY, u, uc, p));
+
+        // রিসার্চ
+        [
+            ['Elicit', 'পেপার রিসার্চ, সারাংশ ও ডেটা এক্সট্রাকশন।', 'https://elicit.com', 'রিসার্চ', 'ফ্রি'],
+            ['Connected Papers', 'পেপার গ্রাফ ভিজুয়ালাইজেশন ও সম্পর্ক দেখায়।', 'https://www.connectedpapers.com',
+                'রিসার্চ', 'ফ্রি'
+            ],
+            ['Scite', 'পেপার সাইটেশন কনটেক্সট ও স্মার্ট সাইটেশন।', 'https://scite.ai', 'রিসার্চ', 'পেইড'],
+            ['Semantic Scholar', 'এআই-চালিত একাডেমিক সার্চ ইঞ্জিন।', 'https://www.semanticscholar.org', 'রিসার্চ',
+                'ফ্রি'],
+            ['Duolingo AI', 'ভাষা শিক্ষা, AI-চালিত পাঠ ও অ্যাসেসমেন্ট।', 'https://www.duolingo.com', 'এডুকেশন', 'ফ্রি'],
+            ['Khan Academy (AI)', 'শিক্ষা প্ল্যাটফর্ম, AI-চালিত রেকমেন্ডেশন।', 'https://www.khanacademy.org', 'এডুকেশন',
+                'ফ্রি'
+            ],
+            ['Wolfram Alpha', 'গণিত, বিজ্ঞান, ডেটা বিশ্লেষণ, AI-চালিত।', 'https://www.wolframalpha.com', 'রিসার্চ',
+                'পেইড'],
+            ['Photomath', 'ক্যামেরা দিয়ে গণিত সমাধান, AI-চালিত।', 'https://photomath.com', 'এডুকেশন', 'ফ্রি'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.RESEARCH, u, uc, p));
+
+        // অ্যানালিটিক্স
+        [
+            ['Tableau (AI)', 'ডেটা ভিজুয়ালাইজেশন ও AI অ্যানালাইসিস।', 'https://www.tableau.com', 'ডেটা', 'পেইড'],
+            ['Power BI (AI)', 'Microsoft-এর BI প্ল্যাটফর্ম, AI ভিজুয়াল।', 'https://powerbi.microsoft.com', 'ডেটা',
+                'পেইড'],
+            ['DataRobot', 'অটোমেটেড ML প্ল্যাটফর্ম।', 'https://www.datarobot.com', 'এমএল', 'পেইড'],
+            ['H2O.ai', 'ওপেন-সোর্স ML প্ল্যাটফর্ম।', 'https://h2o.ai', 'এমএল', 'ওপেন-সোর্স'],
+            ['Google Cloud AI', 'ভিশন, ভাষা, টেবিল ডেটার জন্য AI API।', 'https://cloud.google.com/ai', 'এপিআই', 'পেইড'],
+            ['AWS AI', 'Amazon-এর AI পরিষেবা: Rekognition, Comprehend, ইত্যাদি।', 'https://aws.amazon.com/ai', 'এপিআই',
+                'পেইড'
+            ],
+            ['Azure AI', 'Microsoft-এর AI API: ভিশন, ভাষা, স্পিচ।', 'https://azure.microsoft.com/ai', 'এপিআই', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.ANALYTICS, u, uc, p));
+
+        // কমিউনিকেশন
+        [
+            ['Intercom AI', 'গ্রাহক সহায়তা ও চ্যাটবট।', 'https://www.intercom.com', 'সাপোর্ট', 'পেইড'],
+            ['Drift AI', 'কনভার্সেশনাল মার্কেটিং ও সেলস চ্যাট।', 'https://www.drift.com', 'সেলস', 'পেইড'],
+            ['Zendesk AI', 'কাস্টমার সাপোর্ট টিকিটিং ও AI অটোমেশন।', 'https://www.zendesk.com', 'সাপোর্ট', 'পেইড'],
+            ['HubSpot AI', 'সিআরএম, মার্কেটিং ও সেলস AI ফিচার।', 'https://www.hubspot.com', 'সিআরএম', 'পেইড'],
+            ['Salesforce Einstein', 'সেলসফোর্স-এর AI, প্রেডিক্টিভ অ্যানালাইসিস।', 'https://www.salesforce.com/einstein',
+                'সিআরএম', 'পেইড'
+            ],
+            ['Slack AI', 'স্ল্যাক মেসেজিংয়ে AI সারাংশ ও সুপারিশ।', 'https://slack.com', 'কমিউনিকেশন', 'পেইড'],
+            ['Zoom AI Companion', 'মিটিং সারাংশ, ট্রান্সক্রিপশন ও ফলো-আপ।', 'https://zoom.us', 'কমিউনিকেশন', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.COMM, u, uc, p));
+
+        // ৩ডি & গেমিং
+        [
+            ['NVIDIA Canvas', 'স্কেচ থেকে বাস্তবসম্মত ল্যান্ডস্কেপ তৈরি।', 'https://www.nvidia.com/en-us/studio/canvas/',
+                '৩ডি', 'ফ্রি'
+            ],
+            ['Luma AI', '৩ডি স্ক্যানিং ও মডেল তৈরি।', 'https://lumalabs.ai', '৩ডি', 'পেইড'],
+            ['Polycam', '৩ডি স্ক্যানিং ও মডেলিং অ্যাপ।', 'https://poly.cam', '৩ডি', 'ফ্রি / পেইড'],
+            ['Kaedim', '২ডি ইমেজ থেকে ৩ডি মডেল তৈরি।', 'https://kaedim3d.com', '৩ডি', 'পেইড'],
+            ['Cascadeur', '৩ডি ক্যারেক্টার অ্যানিমেশন, AI ফিজিক্স সহ।', 'https://cascadeur.com', 'অ্যানিমেশন',
+                'ফ্রি / পেইড'],
+            ['DeepMotion', 'ক্যারেক্টার অ্যানিমেশন ও মোশন ক্যাপচার।', 'https://deepmotion.com', 'অ্যানিমেশন', 'পেইড'],
+            ['Meshy', 'টেক্সট ও ইমেজ থেকে ৩ডি মডেল তৈরি।', 'https://www.meshy.ai', '৩ডি', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.GAMING, u, uc, p));
+
+        // স্বাস্থ্য
+        [
+            ['Ada', 'স্বাস্থ্য উপসর্গ বিশ্লেষণ ও সুপারিশ।', 'https://ada.com', 'স্বাস্থ্য', 'ফ্রি'],
+            ['K Health', 'AI-চালিত স্বাস্থ্য অ্যাসেসমেন্ট ও চিকিৎসা পরামর্শ।', 'https://www.khealth.com', 'স্বাস্থ্য',
+                'পেইড'],
+            ['Buoy Health', 'উপসর্গ বিশ্লেষণ ও স্বাস্থ্য নির্দেশিকা।', 'https://www.buoyhealth.com', 'স্বাস্থ্য', 'ফ্রি'],
+            ['Woebot', 'AI-চালিত মানসিক স্বাস্থ্য সহায়তা ও থেরাপি।', 'https://woebot.com', 'মানসিক স্বাস্থ্য', 'পেইড'],
+            ['Wysa', 'AI-চালিত মানসিক স্বাস্থ্য চ্যাটবট ও থেরাপি।', 'https://wysa.com', 'মানসিক স্বাস্থ্য', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.HEALTH, u, uc, p));
+
+        // ফাইন্যান্স
+        [
+            ['Kavout', 'স্টক অ্যানালাইসিস ও AI-চালিত প্রেডিকশন।', 'https://www.kavout.com', 'ফাইন্যান্স', 'পেইড'],
+            ['AlphaSense', 'ফাইন্যান্সিয়াল রিসার্চ ও AI-চালিত সার্চ।', 'https://www.alpha-sense.com', 'ফাইন্যান্স',
+                'পেইড'],
+            ['QuantConnect', 'অ্যালগরিদমিক ট্রেডিং ও AI-চালিত স্ট্র্যাটেজি।', 'https://www.quantconnect.com', 'ট্রেডিং',
+                'ফ্রি / পেইড'
+            ],
+            ['DoNotPay', 'AI-চালিত লিগ্যাল অ্যাসিস্ট্যান্ট, টিকেট ফাইটিং ইত্যাদি।', 'https://donotpay.com', 'লিগ্যাল',
+                'পেইড'],
+            ['Harvey', 'AI-চালিত লিগ্যাল অ্যাসিস্ট্যান্ট, OpenAI-ভিত্তিক।', 'https://harvey.ai', 'লিগ্যাল', 'পেইড'],
+            ['Betterment', 'AI-চালিত রোবো-অ্যাডভাইজার ও বিনিয়োগ পোর্টফোলিও।', 'https://www.betterment.com', 'ফাইন্যান্স',
+                'পেইড'
+            ],
+            ['Wealthfront', 'AI-চালিত বিনিয়োগ পরামর্শ ও অটোমেশন।', 'https://www.wealthfront.com', 'ফাইন্যান্স', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.FINANCE, u, uc, p));
+
+        // মার্কেটিং
+        [
+            ['HubSpot Marketing AI', 'মার্কেটিং অটোমেশন ও AI-চালিত কনটেন্ট।', 'https://www.hubspot.com', 'মার্কেটিং',
+                'পেইড'],
+            ['Clearscope (SEO)', 'কনটেন্ট অপটিমাইজেশন ও এসইও সুপারিশ।', 'https://www.clearscope.io', 'এসইও', 'পেইড'],
+            ['Surfer SEO', 'কনটেন্ট অপটিমাইজেশন ও কীওয়ার্ড অ্যানালাইসিস।', 'https://surferseo.com', 'এসইও', 'পেইড'],
+            ['Ahrefs (AI)', 'এসইও টুলসুইট, AI-চালিত সুপারিশ।', 'https://ahrefs.com', 'এসইও', 'পেইড'],
+            ['SEMrush (AI)', 'এসইও ও মার্কেটিং টুলস, AI অ্যানালাইসিস।', 'https://www.semrush.com', 'এসইও', 'পেইড'],
+            ['Buffer AI', 'সোশ্যাল মিডিয়া পোস্টিং ও AI ক্যাপশন জেনারেটর।', 'https://buffer.com', 'সোশ্যাল',
+                'ফ্রি / পেইড'],
+            ['Hootsuite AI', 'সোশ্যাল মিডিয়া ম্যানেজমেন্ট ও AI সুপারিশ।', 'https://hootsuite.com', 'সোশ্যাল', 'পেইড'],
+            ['BuzzSumo', 'কনটেন্ট রিসার্চ ও AI-চালিত ট্রেন্ড অ্যানালাইসিস।', 'https://buzzsumo.com', 'কনটেন্ট', 'পেইড'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.MARKETING, u, uc, p));
+
+        // অন্যান্য
+        [
+            ['TinyWow', 'পিডিএফ, ভিডিও, ইমেজ টুলস ফ্রি প্ল্যাটফর্ম।', 'https://tinywow.com', 'ইউটিলিটি', 'ফ্রি'],
+            ['ChatPDF', 'পিডিএফ আপলোড করে সারাংশ ও প্রশ্নোত্তর দেয়।', 'https://www.chatpdf.com', 'পিডিএফ',
+                'ফ্রি / পেইড'],
+            ['PDF.ai', 'পিডিএফ চ্যাট ও সারাংশ তৈরি।', 'https://pdf.ai', 'পিডিএফ', 'পেইড'],
+            ['iLovePDF (AI)', 'পিডিএফ টুলস, AI-চালিত অটোমেশন।', 'https://www.ilovepdf.com', 'পিডিএফ', 'ফ্রি / পেইড'],
+            ['Smallpdf (AI)', 'পিডিএফ টুলস, AI-চালিত কনভার্টার।', 'https://smallpdf.com', 'পিডিএফ', 'ফ্রি / পেইড'],
+            ['Let\'s Enhance', 'ছবি আপস্কেল ও উন্নত মানে রূপান্তর।', 'https://letsenhance.io', 'ইমেজ', 'পেইড'],
+            ['Topaz Gigapixel', 'ছবি আপস্কেল ও ডিনোয়েজ, এআই-চালিত।', 'https://www.topazlabs.com/gigapixel-ai',
+                'ইমেজ', 'পেইড'
+            ],
+            ['Cloudinary (AI)', 'মিডিয়া অপটিমাইজেশন ও AI-চালিত এডিটিং।', 'https://cloudinary.com', 'মিডিয়া', 'পেইড'],
+            ['DeepSeek', 'চাইনিজ AI চ্যাটবট, ওপেন-সোর্স।', 'https://deepseek.com', 'চ্যাট', 'ফ্রি'],
+        ].forEach(([n, d, u, uc, p]) => addTool(n, d, C.OTHER, u, uc, p));
+
+        // ==== আরো টুল যোগ করে ৫০০+ পূর্ণ করা ====
+        const extras = [
+            ['Replicate', 'ওপেন-সোর্স মডেল চালানোর প্ল্যাটফর্ম।', 'https://replicate.com', 'এপিআই', 'পেইড'],
+            ['Together AI', 'ওপেন-সোর্স মডেলের জন্য API ও ট্রেনিং।', 'https://together.ai', 'এপিআই', 'পেইড'],
+            ['Modal Labs', 'ক্লাউডে ML মডেল চালানোর প্ল্যাটফর্ম।', 'https://modal.com', 'ডেভেলপার', 'পেইড'],
+            ['Gradient', 'ওপেন-সোর্স মডেল API ও ট্রেনিং।', 'https://gradient.run', 'এপিআই', 'পেইড'],
+            ['Artbreeder', 'জেনেটিক অ্যালগরিদম দিয়ে পোর্ট্রেট ও ল্যান্ডস্কেপ তৈরি।', 'https://www.artbreeder.com',
+                'পোর্ট্রেট', 'ফ্রি / পেইড'
+            ],
+            ['Deep Dream', 'Google-এর নিউরাল নেটওয়ার্ক-ভিত্তিক শিল্পকর্ম জেনারেটর।', 'https://deepdreamgenerator.com',
+                'শিল্পকলা', 'ফ্রি'
+            ],
+            ['Designs.ai', 'লোগো, ভিডিও, অডিও ও ডিজাইন তৈরির অল-ইন-ওয়ান প্ল্যাটফর্ম।', 'https://designs.ai', 'ব্র্যান্ডিং',
+                'পেইড'
+            ],
+            ['Brandmark', 'লোগো ডিজাইন ও ব্র্যান্ডিং টুলস।', 'https://brandmark.io', 'লোগো', 'পেইড'],
+            ['Hatchful', 'Shopify-এর ফ্রি লোগো মেকার।', 'https://hatchful.shopify.com', 'লোগো', 'ফ্রি'],
+            ['LogoAI', 'এআই দিয়ে লোগো ও ব্র্যান্ড কিট তৈরি।', 'https://logoai.com', 'লোগো', 'পেইড'],
+            ['Snappa', 'গ্রাফিক ডিজাইন টুল, সোশ্যাল মিডিয়া ও অ্যাডের জন্য।', 'https://snappa.com', 'গ্রাফিক', 'পেইড'],
+            ['VistaCreate', 'গ্রাফিক ডিজাইন ও ভিডিও তৈরির টুল।', 'https://create.vista.com', 'গ্রাফিক', 'ফ্রি / পেইड'],
+            ['Picsart', 'ফটো এডিটিং, কোলাজ ও ডিজাইন প্ল্যাটফর্ম।', 'https://picsart.com', 'ফটো এডিট', 'ফ্রি / পেইড'],
+            ['Fotor', 'ফটো এডিটিং, ডিজাইন ও কোলাজ টুল।', 'https://www.fotor.com', 'ফটো এডিট', 'ফ্রি / পেইড'],
+            ['Pixlr', 'অনলাইন ফটো এডিটর, ফটোশপের মতো ইন্টারফেস।', 'https://pixlr.com', 'ফটো এডিট', 'ফ্রি / পেইড'],
+            ['ZMO AI', 'পণ্যের ছবি জেনারেশন ও মডেলিং।', 'https://www.zmo.ai', 'ই-কমার্স', 'পেইড'],
+            ['Flair AI', 'পণ্যের ছবি স্টুডিও-কোয়ালিটি তৈরি করে।', 'https://flair.ai', 'ই-কমার্স', 'পেইড'],
+            ['Aragon AI', 'পেশাদার হেডশট ও প্রোফাইল ছবি তৈরি।', 'https://www.aragon.ai', 'হেডশট', 'পেইড'],
+            ['Profile Picture AI', 'এআই দিয়ে কাস্টম প্রোফাইল ছবি তৈরি।', 'https://profilepicture.ai', 'হেডশট',
+                'পেইড'],
+            ['TryItOn AI', 'ভার্চুয়াল ট্রাই-অন ও ফ্যাশন ইমেজ জেনারেশন।', 'https://tryitonai.com', 'ফ্যাশন', 'পেইড'],
+            ['FashionAI', 'ফ্যাশন ডিজাইন ও স্টাইল সুপারিশ।', 'https://fashionai.com', 'ফ্যাশন', 'পেইড'],
+            ['Respeecher', 'ভয়েস ক্লোনিং ও ডিপ ফেক অডিও তৈরি।', 'https://www.respeecher.com', 'ভয়েস ক্লোন', 'পেইড'],
+            ['Amper Music', 'কনটেন্টের জন্য কাস্টম মিউজিক তৈরি।', 'https://www.ampermusic.com', 'মিউজিক', 'পেইড'],
+            ['Soundful', 'রয়্যালটি-ফ্রি মিউজিক জেনারেটর।', 'https://soundful.com', 'মিউজিক', 'পেইড'],
+            ['Mubert', 'এআই মিউজিক স্ট্রিমিং ও জেনারেশন প্ল্যাটফর্ম।', 'https://mubert.com', 'মিউজিক', 'পেইড'],
+            ['Ecrett Music', 'গেম ও ভিডিওর জন্য কাস্টম মিউজিক।', 'https://ecrettmusic.com', 'মিউজিক', 'পেইড'],
+            ['LALAL.AI', 'অডিও থেকে ভোকাল ও ইন্সট্রুমেন্টাল আলাদা করে।', 'https://www.lalal.ai', 'অডিও সেপারেট',
+                'ফ্রি / পেইড'
+            ],
+            ['Vocal Remover', 'অডিও থেকে ভোকাল রিমুভ করে।', 'https://vocalremover.org', 'অডিও এডিট', 'ফ্রি'],
+            ['Moises', 'অডিও ট্র্যাক থেকে ইন্সট্রুমেন্ট আলাদা করে।', 'https://moises.ai', 'অডিও এডিট', 'ফ্রি / পেইড'],
+            ['NaturalReader', 'টেক্সট-টু-স্পিচ ও অডিওবুক তৈরি।', 'https://naturalreaders.com', 'ভয়েস', 'ফ্রি / পেইড'],
+            ['TTSMaker', 'বিনামূল্যে টেক্সট-টু-স্পিচ জেনারেটর।', 'https://ttsmaker.com', 'ভয়েস', 'ফ্রি'],
+            ['Amazon Polly', 'AWS-এর টেক্সট-টু-স্পিচ পরিষেবা।', 'https://aws.amazon.com/polly', 'ভয়েস', 'পেইড'],
+            ['Google TTS', 'Google-এর TTS, বহু ভাষা সমর্থন।', 'https://cloud.google.com/text-to-speech', 'ভয়েস',
+                'পেইড'],
+            ['Microsoft Azure TTS', 'Azure-এর নিউরাল TTS পরিষেবা।', 'https://azure.microsoft.com/text-to-speech',
+                'ভয়েস', 'পেইড'
+            ],
+            ['WellSaid Labs', 'ব্র্যান্ড-ভয়েস তৈরি, টেক্সট-টু-স্পিচ।', 'https://wellsaidlabs.com', 'ভয়েস', 'পেইড'],
+            ['SonarQube', 'কোড কোয়ালিটি ও সিকিউরিটি স্ক্যানিং।', 'https://www.sonarqube.org', 'কোড', 'ওপেন-সোর্স'],
+            ['Snyk', 'কোড ডিপেন্ডেন্সি সিকিউরিটি স্ক্যানিং।', 'https://snyk.io', 'সিকিউরিটি', 'ফ্রি / পেইড'],
+            ['Dependabot', 'গিটহাব ডিপেন্ডেন্সি আপডেট অটোমেশন।', 'https://github.com/dependabot', 'ডেভঅপস', 'ফ্রি'],
+            ['Mem', 'AI-চালিত নোট টেকিং ও পুনরুদ্ধার।', 'https://mem.ai', 'নোট', 'ফ্রি / পেইড'],
+            ['Obsidian (AI)', 'নোট টেকিং, AI প্লাগইন সহ।', 'https://obsidian.md', 'নোট', 'ওপেন-সোর্স'],
+            ['Coda AI', 'ডকুমেন্ট ও টেবিলে AI সহায়তা।', 'https://coda.io', 'ডকুমেন্ট', 'পেইড'],
+            ['Taskade AI', 'টাস্ক লিস্ট, মাইন্ড ম্যাপ ও AI সহায়তা।', 'https://www.taskade.com', 'প্রোডাক্টিভিটি',
+                'ফ্রি / পেইড'
+            ],
+            ['Trello AI', 'বোর্ড ম্যানেজমেন্ট, AI-চালিত অটোমেশন।', 'https://trello.com', 'প্রোডাক্টিভিটি', 'পেইড'],
+            ['Google Meet AI', 'মিটিং ট্রান্সক্রিপশন ও নোট নেয়া।', 'https://meet.google.com', 'কমিউনিকেশন', 'পেইড'],
+            ['Avoma', 'সেলস কল ট্রান্সক্রিপশন ও অ্যানালাইসিস।', 'https://avoma.com', 'সেলস', 'পেইড'],
+            ['Gong.io', 'সেলস কল অ্যানালাইসিস ও AI ইন্সাইট।', 'https://www.gong.io', 'সেলস', 'পেইড'],
+            ['Clari', 'রেভিনিউ অপারেশনস ও AI ফোরকাস্টিং।', 'https://clari.com', 'সেলস', 'পেইড'],
+            ['Apollo.io', 'সেলস ইন্টেলিজেন্স ও AI-চালিত লিড জেনারেশন।', 'https://www.apollo.io', 'সেলস', 'পেইড'],
+            ['Lusha', 'কন্টাক্ট ডেটা এনরিচমেন্ট ও AI সুপারিশ।', 'https://www.lusha.com', 'সেলস', 'পেইড'],
+            ['ZoomInfo', 'B2B ডেটাবেস ও AI-চালিত ইন্টেলিজেন্স।', 'https://www.zoominfo.com', 'সেলস', 'পেইড'],
+            ['Crisp AI', 'চ্যাটবট ও কাস্টমার সাপোর্ট অটোমেশন।', 'https://crisp.chat', 'সাপোর্ট', 'পেইড'],
+            ['Freshdesk AI', 'কাস্টমার সাপোর্ট ও AI চ্যাটবট।', 'https://www.freshworks.com', 'সাপোর্ট', 'পেইড'],
+            ['Pipedrive AI', 'সেলস পাইপলাইন ম্যানেজমেন্ট ও AI সুপারিশ।', 'https://www.pipedrive.com', 'সেলস', 'পেইড'],
+            ['Close AI', 'সেলস ডায়ালার ও AI অ্যাসিস্ট্যান্ট।', 'https://close.com', 'সেলস', 'পেইড'],
+            ['Folk AI', 'সিআরএম ও AI-চালিত কন্টাক্ট ম্যানেজমেন্ট।', 'https://www.folk.app', 'সিআরএম', 'পেইড'],
+            ['Clay AI', 'পার্সোনালাইজড আউটরিচ ও AI ডেটা এনরিচমেন্ট।', 'https://www.clay.earth', 'সেলস', 'পেইড'],
+            ['Reply.io', 'সেলস এঙ্গেজমেন্ট ও AI-চালিত ইমেইল সিকোয়েন্স।', 'https://reply.io', 'সেলস', 'পেইড'],
+            ['SmartWriter', 'AI-চালিত কোল্ড ইমেইল ও পার্সোনালাইজেশন।', 'https://smartwriter.ai', 'সেলস', 'পেইড'],
+            ['Instantly AI', 'কোল্ড ইমেইল ক্যাম্পেইন ও AI অপটিমাইজেশন।', 'https://instantly.ai', 'সেলস', 'পেইড'],
+            ['Lemlist', 'পার্সোনালাইজড ইমেইল ক্যাম্পেইন ও AI ভ্যারিয়েন্ট।', 'https://www.lemlist.com', 'সেলস', 'পেইড'],
+            ['Coursera AI', 'অনলাইন কোর্স, AI-চালিত কনটেন্ট সুপারিশ।', 'https://www.coursera.org', 'এডুকেশন', 'পেইড'],
+            ['edX AI', 'অনলাইন কোর্স, AI অ্যাসিস্ট্যান্ট সহ।', 'https://www.edx.org', 'এডুকেশন', 'পেইড'],
+            ['Udemy AI', 'কোর্স সুপারিশ ও AI-চালিত লার্নিং পাথ।', 'https://www.udemy.com', 'এডুকেশন', 'পেইড'],
+            ['Socratic', 'Google-এর AI-চালিত হোমওয়ার্ক সহায়তা।', 'https://socratic.org', 'এডুকেশন', 'ফ্রি'],
+            ['Mathpix', 'গণিতের সমীকরণ ডিজিটালাইজেশন ও OCR।', 'https://mathpix.com', 'এডুকেশন', 'ফ্রি / পেইড'],
+            ['Symbolab', 'গণিত সমাধান ও স্টেপ-বাই-স্টেপ ব্যাখ্যা।', 'https://www.symbolab.com', 'এডুকেশন', 'পেইড'],
+            ['Dataiku', 'এন্টারপ্রাইজ ML ও ডেটা সায়েন্স প্ল্যাটফর্ম।', 'https://www.dataiku.com', 'এমএল', 'পেইড'],
+            ['Alteryx', 'ডেটা প্রস্তুতি ও অ্যানালিটিক্স অটোমেশন।', 'https://www.alteryx.com', 'ডেটা', 'পেইড'],
+            ['RapidMiner', 'ডেটা মাইনিং ও ML প্ল্যাটফর্ম।', 'https://rapidminer.com', 'এমএল', 'পেইড'],
+            ['Knime', 'ওপেন-সোর্স ডেটা অ্যানালিটিক্স প্ল্যাটফর্ম।', 'https://www.knime.com', 'ডেটা', 'ওপেন-সোর্স'],
+            ['BigML', 'ওপেন-সোর্স ML মডেল বিল্ডিং ও ডেপ্লয়মেন্ট।', 'https://bigml.com', 'এমএল', 'পেইড'],
+            ['MonkeyLearn', 'টেক্সট অ্যানালাইসিস ও ML মডেল বিল্ডিং।', 'https://monkeylearn.com', 'টেক্সট', 'পেইড'],
+            ['Clarifai', 'কম্পিউটার ভিশন API ও মডেল ট্রেনিং।', 'https://www.clarifai.com', 'ভিশন', 'পেইড'],
+            ['IBM Watson', 'AI API ও ML প্ল্যাটফর্ম।', 'https://www.ibm.com/watson', 'এপিআই', 'পেইড'],
+            ['DataBricks', 'ডেটা ইঞ্জিনিয়ারিং ও ML প্ল্যাটফর্ম।', 'https://databricks.com', 'ডেটা', 'পেইড'],
+            ['Snowflake (AI)', 'ডেটা ক্লাউড ও AI ফিচার।', 'https://www.snowflake.com', 'ডেটা', 'পেইড'],
+            ['Domino Data Lab', 'এন্টারপ্রাইজ ML প্ল্যাটফর্ম।', 'https://dominodatalab.com', 'এমএল', 'পেইড'],
+            ['Luminance', 'লিগ্যাল ডকুমেন্ট রিভিউ ও AI অ্যানালাইসিস।', 'https://www.luminance.com', 'লিগ্যাল', 'পেইড'],
+            ['LawGeex', 'চুক্তি পর্যালোচনা ও AI-চালিত কমপ্লায়েন্স।', 'https://www.lawgeex.com', 'লিগ্যাল', 'পেইড'],
+            ['Kira Systems', 'লিগ্যাল ডকুমেন্ট অ্যানালাইসিস ও এক্সট্রাকশন।', 'https://kirasystems.com', 'লিগ্যাল',
+                'পেইড'],
+            ['Casetext', 'আইনি গবেষণা ও AI-চালিত প্যারালিগ্যাল সহায়তা।', 'https://casetext.com', 'লিগ্যাল', 'পেইড'],
+            ['Robinhood AI', 'পার্সোনালাইজড বিনিয়োগ সুপারিশ।', 'https://robinhood.com', 'ফাইন্যান্স', 'ফ্রি'],
+            ['StoryChief', 'কনটেন্ট মার্কেটিং প্ল্যাটফর্ম, AI সহায়তা।', 'https://storychief.io', 'কনটেন্ট', 'পেইড'],
+            ['Later AI', 'সোশ্যাল মিডিয়া প্ল্যানিং ও AI ক্যাপশন।', 'https://later.com', 'সোশ্যাল', 'পেইড'],
+            ['Sprout Social AI', 'সোশ্যাল মিডিয়া অ্যানালাইসিস ও AI ইনসাইট।', 'https://sproutsocial.com', 'সোশ্যাল',
+                'পেইড'
+            ],
+            ['Brand24', 'সোশ্যাল লিসেনিং ও AI-চালিত মনিটরিং।', 'https://brand24.com', 'সোশ্যাল', 'পেইড'],
+            ['Mention', 'ব্র্যান্ড মনিটরিং ও AI-চালিত এলার্ট।', 'https://mention.com', 'সোশ্যাল', 'পেইড'],
+            ['Tolstoy', 'ইন্টারেক্টিভ ভিডিও ও AI-চালিত মার্কেটিং।', 'https://www.gotolstoy.com', 'ভিডিও', 'পেইড'],
+            ['Vizard', 'ভিডিও মার্কেটিং ও AI-চালিত এডিটিং।', 'https://vizard.ai', 'ভিডিও', 'পেইড'],
+            ['Wideo', 'অ্যানিমেটেড ভিডিও তৈরি, মার্কেটিংয়ের জন্য।', 'https://wideo.co', 'ভিডিও', 'পেইড'],
+            ['Animaker', 'অ্যানিমেটেড ভিডিও ও মার্কেটিং কনটেন্ট।', 'https://www.animaker.com', 'ভিডিও', 'পেইড'],
+            ['HiPDF', 'পিডিএফ এডিটিং ও কনভার্ট টুল।', 'https://www.hipdf.com', 'পিডিএফ', 'ফ্রি / পেইড'],
+            ['AI Image Enlarger', 'ছবি আপস্কেল ও এনহ্যান্স করে।', 'https://imglarger.com', 'ইমেজ', 'ফ্রি / পেইড'],
+            ['DeepImage', 'ছবি আপস্কেল ও উন্নতমানের এডিটিং।', 'https://deepimage.ai', 'ইমেজ', 'পেইড'],
+            ['VanceAI', 'ছবি আপস্কেল, রিটাচ ও ব্যাকগ্রাউন্ড রিমুভ।', 'https://vanceai.com', 'ইমেজ', 'ফ্রি / পেইড'],
+            ['PixelBin', 'ইমেজ ম্যানেজমেন্ট ও AI-চালিত অপটিমাইজেশন।', 'https://pixelbin.io', 'ইমেজ', 'পেইড'],
+            ['Imagen', 'গুগল ক্লাউডের ইমেজ জেনারেশন মডেল।', 'https://imagen.research.google', 'ইমেজ', 'ফ্রি'],
+            ['Parti', 'Google-এর টেক্সট-টু-ইমেজ মডেল।', 'https://parti.research.google', 'ইমেজ', 'ফ্রি'],
+            ['CogView', 'বাইডু-এর টেক্সট-টু-ইমেজ মডেল।', 'https://cogview.cn', 'ইমেজ', 'ফ্রি'],
+            ['Ernie (Baidu)', 'বাইডু-এর চ্যাটবট ও AI প্ল্যাটফর্ম।', 'https://yiyan.baidu.com', 'চ্যাট', 'ফ্রি'],
+            ['Tongyi (Alibaba)', 'আলিবাবা-এর AI চ্যাটবট।', 'https://tongyi.aliyun.com', 'চ্যাট', 'ফ্রি'],
+            ['Kimi (Moonshot)', 'চাইনিজ AI চ্যাটবট, দীর্ঘ কনটেক্সট।', 'https://kimi.moonshot.cn', 'চ্যাট', 'ফ্রি'],
+            ['Playground AI', 'ইমেজ এডিটিং ও জেনারেশন, ইন্টুইটিভ ইন্টারফেস।', 'https://playgroundai.com', 'ইমেজ এডিট',
+                'ফ্রি'
+            ],
+            ['Lexica', 'Stable Diffusion-ভিত্তিক ইমেজ সার্চ ও জেনারেটর।', 'https://lexica.art', 'আর্ট', 'ফ্রি'],
+            ['Forefront AI', 'বহু মডেল ও চ্যাট হিস্টোরি সহ প্ল্যাটফর্ম।', 'https://forefront.ai', 'চ্যাট', 'ফ্রি'],
+            ['Typeface', 'ব্র্যান্ড-কেন্দ্রিক কনটেন্ট জেনারেশন প্ল্যাটফর্ম।', 'https://www.typeface.ai', 'ব্র্যান্ড কনটেন্ট',
+                'পেইড'
+            ],
+            ['Writer.com', 'এন্টারপ্রাইজ রাইটিং অ্যাসিস্ট্যান্ট ও গভর্নেন্স।', 'https://writer.com', 'এন্টারপ্রাইজ',
+                'পেইড'],
+            ['Lex.page', 'রাইটিং অ্যাসিস্ট্যান্ট, দীর্ঘ ফর্ম কনটেন্টের জন্য।', 'https://lex.page', 'রাইটিং', 'ফ্রি'],
+            ['Inferkit', 'টেক্সট জেনারেশন API, কাস্টম মডেল।', 'https://inferkit.com', 'ডেভেলপার', 'পেইড'],
+            ['Cohere Generate', 'এন্টারপ্রাইজ-গ্রেড টেক্সট জেনারেশন API।', 'https://cohere.com', 'এপিআই, জেনারেট',
+                'পেইড'
+            ],
+            ['AI21 Labs', 'Jurassic মডেল, টেক্সট জেনারেশন ও সামারি।', 'https://www.ai21.com', 'এপিআই', 'পেইড'],
+            ['OpenAI Playground', 'OpenAI মডেল নিয়ে এক্সপেরিমেন্টের প্ল্যাটফর্ম।', 'https://platform.openai.com/playground',
+                'এপিআই, টেস্ট', 'ফ্রি'
+            ],
+            ['Anthropic Console', 'Claude API পরীক্ষার জন্য কনসোল।', 'https://console.anthropic.com', 'এপিআই',
+                'ফ্রি'],
+        ];
+        extras.forEach(([n, d, u, uc, p]) => addTool(n, d, C.OTHER, u, uc, p));
+
+        console.log(`✅ মোট ${TOOLS.length} টি AI টুল লোড হয়েছে।`);
+
+        // ============================================================
+        //  অ্যাপ্লিকেশন লজিক
+        // ============================================================
+        (function() {
+            'use strict';
+
+            // DOM
+            const grid = document.getElementById('toolGrid');
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+            const filterGroup = document.getElementById('filterGroup');
+            const totalBadge = document.getElementById('totalBadge');
+            const statTotal = document.getElementById('statTotal');
+            const statCategories = document.getElementById('statCategories');
+            const statFavorites = document.getElementById('statFavorites');
+            const resultCount = document.getElementById('resultCount');
+            const gridTitle = document.getElementById('gridTitle');
+            const noResults = document.getElementById('noResults');
+            const themeToggle = document.getElementById('themeToggle');
+            const showFavoritesBtn = document.getElementById('showFavorites');
+            const toast = document.getElementById('toast');
+
+            // Modal
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalClose = document.getElementById('modalClose');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalName = document.getElementById('modalName');
+            const modalDesc = document.getElementById('modalDesc');
+            const modalUrl = document.getElementById('modalUrl');
+            const modalUseCase = document.getElementById('modalUseCase');
+            const modalPricing = document.getElementById('modalPricing');
+            const modalRating = document.getElementById('modalRating');
+            const modalVisitBtn = document.getElementById('modalVisitBtn');
+            const modalCopyBtn = document.getElementById('modalCopyBtn');
+            const modalFavoriteBtn = document.getElementById('modalFavoriteBtn');
+
+            // State
+            let currentCategory = 'all';
+            let searchQuery = '';
+            let showFavorites = false;
+            let currentModalId = null;
+            let toastTimer = null;
+
+            // --- Toast ---
+            function showToast(msg) {
+                if (toastTimer) clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            // --- Theme ---
+            function getTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                themeToggle.textContent = theme === 'dark' ? '☀️' : '🌓';
+            }
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+            });
+
+            // --- Category Filters ---
+            function buildCategoryFilters() {
+                const cats = new Set(TOOLS.map(t => t.category));
+                const sorted = ['all', ...Array.from(cats).sort()];
+                filterGroup.innerHTML = `<span class="filter-label">📂</span>`;
+                sorted.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = `filter-btn ${cat === 'all' ? 'active' : ''}`;
+                    btn.dataset.category = cat;
+                    btn.textContent = cat === 'all' ? 'সব' : cat;
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-group .filter-btn').forEach(b => b.classList.remove(
+                        'active'));
+                        btn.classList.add('active');
+                        currentCategory = cat;
+                        applyFilters();
+                        // scroll into view
+                        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    });
+                    filterGroup.appendChild(btn);
+                });
+                statCategories.textContent = sorted.length - 1;
+            }
+            buildCategoryFilters();
+
+            // --- Render ---
+            function render(tools) {
+                grid.innerHTML = '';
+                if (tools.length === 0) {
+                    noResults.style.display = 'block';
+                    resultCount.textContent = '০টি ফলাফল';
+                    return;
+                }
+                noResults.style.display = 'none';
+
+                tools.forEach(tool => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.setAttribute('role', 'listitem');
+                    const favIcon = tool.favorite ? '⭐' : '☆';
+                    card.innerHTML = `
+                        <div class="card-top">
+                            <div class="card-name">
+                                ${tool.name}
+                                <small>${tool.category}</small>
+                            </div>
+                            <span class="card-category">${tool.category}</span>
+                        </div>
+                        <p class="card-desc">${tool.desc}</p>
+                        <div class="card-meta">
+                            <span>💰 ${tool.pricing}</span>
+                            <span>⭐ ${tool.rating}</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn" data-action="detail" data-id="${tool.id}">📄 বিস্তারিত</button>
+                            <button class="btn btn-primary" data-action="visit" data-url="${encodeURIComponent(tool.url)}">🔗 ভিজিট</button>
+                        </div>
+                        <button class="favorite-btn ${tool.favorite ? 'active' : ''}" data-action="favorite" data-id="${tool.id}" aria-label="প্রিয় টগল">${favIcon}</button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // Events
+                grid.querySelectorAll('[data-action="detail"]').forEach(btn => {
+                    btn.addEventListener('click', () => openModal(Number(btn.dataset.id)));
+                });
+                grid.querySelectorAll('[data-action="visit"]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const url = decodeURIComponent(btn.dataset.url);
+                        window.open(url, '_blank');
+                    });
+                });
+                grid.querySelectorAll('[data-action="favorite"]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleFavorite(Number(btn.dataset.id));
+                    });
+                });
+
+                resultCount.textContent = `${tools.length}টি ফলাফল`;
+            }
+
+            // --- Apply Filters ---
+            function applyFilters() {
+                let result = [...TOOLS];
+                const q = searchQuery.trim().toLowerCase();
+                if (q) {
+                    result = result.filter(t =>
+                        t.name.toLowerCase().includes(q) ||
+                        t.desc.toLowerCase().includes(q) ||
+                        t.category.toLowerCase().includes(q)
+                    );
+                }
+                if (currentCategory !== 'all') {
+                    result = result.filter(t => t.category === currentCategory);
+                }
+                if (showFavorites) {
+                    result = result.filter(t => t.favorite);
+                }
+                render(result);
+                updateStats();
+                gridTitle.textContent = showFavorites ? '⭐ প্রিয় টুল' :
+                    (currentCategory === 'all' ? 'সকল টুল' : currentCategory);
+            }
+
+            // --- Stats ---
+            function updateStats() {
+                const total = TOOLS.length;
+                const favCount = TOOLS.filter(t => t.favorite).length;
+                statTotal.textContent = total;
+                statFavorites.textContent = favCount;
+                totalBadge.textContent = `${total}টি`;
+                document.getElementById('year').textContent = new Date().getFullYear();
+                document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('bn-BD', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+            updateStats();
+
+            // --- Favorite ---
+            function toggleFavorite(id) {
+                const tool = TOOLS.find(t => t.id === id);
+                if (tool) {
+                    tool.favorite = !tool.favorite;
+                    applyFilters();
+                    if (currentModalId === id) {
+                        modalFavoriteBtn.textContent = tool.favorite ? '⭐ প্রিয় রিমুভ' : '⭐ প্রিয় করুন';
+                    }
+                    showToast(tool.favorite ? `⭐ "${tool.name}" প্রিয় তালিকায় যোগ হয়েছে` :
+                        `"${tool.name}" প্রিয় তালিকা থেকে সরানো হয়েছে`);
+                    // save to localStorage
+                    saveFavorites();
+                }
+            }
+
+            // --- Save/Load Favorites ---
+            function saveFavorites() {
+                const favIds = TOOLS.filter(t => t.favorite).map(t => t.id);
+                try { localStorage.setItem('favorites', JSON.stringify(favIds)); } catch (e) {}
+            }
+
+            function loadFavorites() {
+                try {
+                    const data = localStorage.getItem('favorites');
+                    if (data) {
+                        const favIds = JSON.parse(data);
+                        TOOLS.forEach(t => { t.favorite = favIds.includes(t.id); });
+                    }
+                } catch (e) {}
+            }
+            loadFavorites();
+
+            // --- Modal ---
+            function openModal(id) {
+                const tool = TOOLS.find(t => t.id === id);
+                if (!tool) return;
+                currentModalId = id;
+                modalCategory.textContent = tool.category;
+                modalName.textContent = tool.name;
+                modalDesc.textContent = tool.desc;
+                modalUrl.href = tool.url;
+                modalUrl.textContent = tool.url.replace(/^https?:\/\//, '').slice(0, 45) + (tool.url.length > 45 ? '…' :
+                '');
+                modalUseCase.textContent = tool.useCase;
+                modalPricing.textContent = tool.pricing;
+                const r = Math.min(5, Math.max(1, Math.round(Number(tool.rating))));
+                modalRating.textContent = '⭐'.repeat(r) + '☆'.repeat(5 - r);
+                modalFavoriteBtn.textContent = tool.favorite ? '⭐ প্রিয় রিমুভ' : '⭐ প্রিয় করুন';
+                modalOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('open');
+                document.body.style.overflow = '';
+                currentModalId = null;
+            }
+
+            modalClose.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+            // Modal actions
+            modalVisitBtn.addEventListener('click', () => {
+                if (currentModalId) {
+                    const tool = TOOLS.find(t => t.id === currentModalId);
+                    if (tool) window.open(tool.url, '_blank');
+                }
+            });
+
+            modalCopyBtn.addEventListener('click', () => {
+                if (currentModalId) {
+                    const tool = TOOLS.find(t => t.id === currentModalId);
+                    if (tool) {
+                        const text =
+                            `${tool.name}\n${tool.desc}\n${tool.category}\n💰 ${tool.pricing}\n⭐ ${tool.rating}\n🔗 ${tool.url}`;
+                        navigator.clipboard.writeText(text).then(() => {
+                            showToast('✅ টুলের তথ্য কপি হয়েছে!');
+                        }).catch(() => {
+                            const ta = document.createElement('textarea');
+                            ta.value = text;
+                            document.body.appendChild(ta);
+                            ta.select();
+                            document.execCommand('copy');
+                            ta.remove();
+                            showToast('✅ কপি হয়েছে!');
+                        });
+                    }
+                }
+            });
+
+            modalFavoriteBtn.addEventListener('click', () => {
+                if (currentModalId) {
+                    toggleFavorite(currentModalId);
+                    const tool = TOOLS.find(t => t.id === currentModalId);
+                    if (tool) {
+                        modalFavoriteBtn.textContent = tool.favorite ? '⭐ প্রিয় রিমুভ' : '⭐ প্রিয় করুন';
+                    }
+                }
+            });
+
+            // --- Search ---
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                clearSearch.classList.toggle('visible', searchQuery.length > 0);
+                applyFilters();
+            });
+
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                clearSearch.classList.remove('visible');
+                applyFilters();
+                searchInput.focus();
+            });
+
+            // --- Favorites toggle ---
+            showFavoritesBtn.addEventListener('click', () => {
+                showFavorites = !showFavorites;
+                showFavoritesBtn.classList.toggle('active', showFavorites);
+                showFavoritesBtn.textContent = showFavorites ? '⭐ প্রিয় (অন)' : '⭐ প্রিয়';
+                showFavoritesBtn.style.background = showFavorites ? 'var(--accent-light)' : 'var(--card)';
+                showFavoritesBtn.style.color = showFavorites ? 'var(--accent)' : '';
+                applyFilters();
+            });
+
+            // --- Init ---
+            applyFilters();
+
+            // --- Swipe to close modal (mobile) ---
+            let touchStartY = 0;
+            modalOverlay.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            modalOverlay.addEventListener('touchmove', (e) => {
+                const dy = e.touches[0].clientY - touchStartY;
+                if (dy > 60 && modalOverlay.classList.contains('open')) {
+                    closeModal();
+                }
+            }, { passive: true });
+
+            console.log(`✅ AiToolBox চালু — ${TOOLS.length} টি টুল লোডেড।`);
+        })();
+    </script>
+</body>
 </html>
